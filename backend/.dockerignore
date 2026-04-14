@@ -1,0 +1,5 @@
+target/
+.git
+*.jar
+Dockerfile
+docker-compose.yml
