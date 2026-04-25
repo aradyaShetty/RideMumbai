@@ -93,7 +93,7 @@ pipeline {
                             -Dsonar.projectKey=ridemumbai \
                             -Dsonar.sources=frontend/src,backend/src/main/java \
                             -Dsonar.java.binaries=backend/target/classes \
-                            -Dsonar.host.url=http://ridemumbai_sonarqube:9000"
+                            -Dsonar.host.url=http://sonarqube:9000"
                     }
                 }
             }
