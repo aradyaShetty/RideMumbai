@@ -16,7 +16,8 @@ public class CorsConfig {
                 registry.addMapping("/**")
                     .allowedOrigins(
                         "https://ride-mumbai-dash.netlify.app", // your frontend
-                        "http://localhost:5173" // for local dev
+                        "http://localhost:5173", // for local dev
+                        "http://localhost:3000"  // for docker dev
                     )
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowCredentials(true);

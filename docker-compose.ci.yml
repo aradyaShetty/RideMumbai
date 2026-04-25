@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: ridemumbai_jenkins
+    user: root
+    privileged: true
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - //var/run/docker.sock:/var/run/docker.sock
+    command: >
+      bash -c "apt-get update && 
+      apt-get install -y docker.io docker-compose && 
+      chown -R 1000:1000 /var/jenkins_home &&
+      /usr/local/bin/jenkins.sh"
+    networks:
+      - ci_network
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: ridemumbai_sonarqube
+    depends_on:
+      - sonar_db
+    environment:
+      - SONAR_JDBC_URL=jdbc:postgresql://sonar_db:5432/sonarqube
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - ci_network
+
+  sonar_db:
+    image: postgres:15-alpine
+    container_name: ridemumbai_sonar_db
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonarqube
+    volumes:
+      - sonar_postgres_data:/var/lib/postgresql/data
+    networks:
+      - ci_network
+
+volumes:
+  jenkins_home:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  sonar_postgres_data:
+
+networks:
+  ci_network:
+    driver: bridge
