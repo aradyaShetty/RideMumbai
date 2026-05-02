@@ -16,6 +16,7 @@ services:
       bash -c "apt-get update && 
       apt-get install -y docker.io docker-compose && 
       chown -R 1000:1000 /var/jenkins_home &&
+      git config --global --add safe.directory '*' &&
       /usr/local/bin/jenkins.sh"
     networks:
       - ci_network

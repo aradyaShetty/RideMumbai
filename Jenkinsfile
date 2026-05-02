@@ -11,9 +11,8 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // When running from a webhook/Multibranch Pipeline, it checks out automatically.
-                // Using checkout scm for standard practice
-                checkout scm
+                // Explicit checkout since checkout scm is failing with "not in a git directory"
+                git branch: 'main', url: 'https://github.com/aradyaShetty/RideMumbai.git'
             }
         }
 
@@ -63,7 +62,7 @@ pipeline {
                         dir('backend') {
                             // Run the maven tests. 
                             // If tests fail, pipeline stops, ensuring code quality
-                            sh 'mvn test || true' 
+                            sh 'mvn test' 
                         }
                     }
                 }
